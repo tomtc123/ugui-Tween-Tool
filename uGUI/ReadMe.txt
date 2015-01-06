@@ -1,0 +1,1 @@
+Have sameone like NGUI Tween? ugui tween is can run well without ngui.
