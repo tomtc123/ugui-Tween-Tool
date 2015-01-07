@@ -5,6 +5,7 @@ using System.Collections;
 /// Ease type.
 /// </summary>
 public enum EaseType{
+	none,
 	easeInQuad,
 	easeOutQuad,
 	easeInOutQuad,

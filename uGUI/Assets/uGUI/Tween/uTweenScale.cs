@@ -5,8 +5,8 @@ using System.Collections;
 namespace uGUI {
 	public class uTweenScale : uTweener {
 
-		public Vector3 from;
-		public Vector3 to;
+		public Vector3 from = Vector3.zero;
+		public Vector3 to = Vector3.one;
 
 		RectTransform mRectTransform;
 

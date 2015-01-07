@@ -7,7 +7,8 @@ using System.Collections;
 namespace uGUI {
 	public class uTweener : MonoBehaviour {
 
-		public EaseType easeType = EaseType.linear;
+		public AnimationCurve animationCurve = new AnimationCurve(new Keyframe(0f, 0f, 0f, 1f), new Keyframe(1f, 1f, 1f, 0f));
+		public EaseType easeType = EaseType.none;
 		public LoopStyle loopStyle = LoopStyle.Once;
 		public float delay = 0f;
 		public float duration = 1f;
@@ -92,7 +93,7 @@ namespace uGUI {
 		/// <param name="_isFinished">If set to <c>true</c> _is finished.</param>
 		public void Sample(float _factor, bool _isFinished) {
 			float val = Mathf.Clamp01(_factor);
-			val = EaseManager.EasingFromType(0, 1, val, easeType);
+			val = (easeType == EaseType.none) ? animationCurve.Evaluate(val): EaseManager.EasingFromType(0, 1, val, easeType);
 			OnUpdate(val, _isFinished);
 		}
 
