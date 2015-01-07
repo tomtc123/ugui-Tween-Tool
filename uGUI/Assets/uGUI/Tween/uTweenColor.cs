@@ -17,6 +17,7 @@ namespace uGUI {
 		bool mCached = false;
 
 		void Cache() {
+			mCached = true;
 			mText = GetComponent<Text> ();
 			if (mText != null){ return;}
 			mLight = light;
