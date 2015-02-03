@@ -4,7 +4,8 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using System.Collections;
 
-namespace uGUI {
+namespace uTools {
+	[AddComponentMenu("uTools/Tween/Button Scale(uTools)")]
 	public class uButtonScale : MonoBehaviour, uIPointHandler {
 
 		public RectTransform tweenTarget;

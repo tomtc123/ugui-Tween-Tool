@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-namespace uGUI {
+namespace uTools {
 	public class uTweenValue : uTweener {
 
 		public float from;

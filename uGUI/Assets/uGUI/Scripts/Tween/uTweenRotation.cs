@@ -2,7 +2,8 @@
 using UnityEngine.UI;
 using System.Collections;
 
-namespace uGUI {
+namespace uTools {
+	[AddComponentMenu("uTools/Tween/Tween Rotation(uTools)")]
 	public class uTweenRotation : uTweener {
 		public Vector3 from;
 		public Vector3 to;

@@ -2,7 +2,7 @@
 using UnityEngine.EventSystems;
 using System.Collections;
 
-namespace uGUI {
+namespace uTools {
 	public interface uIPointHandler : 
 		IPointerEnterHandler,
 		IPointerDownHandler,

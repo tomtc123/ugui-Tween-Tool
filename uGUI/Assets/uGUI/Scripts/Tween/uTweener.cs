@@ -1,11 +1,13 @@
 ﻿using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using System.Collections;
 
 /// <summary>
 /// Base of tween
 /// </summary>
-namespace uGUI {
-	public class uTweener : MonoBehaviour {
+namespace uTools {
+	public abstract class uTweener : MonoBehaviour {
 
 		public AnimationCurve animationCurve = new AnimationCurve(new Keyframe(0f, 0f, 0f, 1f), new Keyframe(1f, 1f, 1f, 0f));
 		public EaseType easeType = EaseType.none;
@@ -13,8 +15,9 @@ namespace uGUI {
 		public float delay = 0f;
 		public float duration = 1f;
 		public bool ignoreTimeScale = true;
-		public MonoBehaviour eventRecevier = null;
-		public string onFinished = null;
+		//public MonoBehaviour eventRecevier = null;
+		public UnityEvent onFinished = null;
+		//public UnityEvent onFinishedCallBack;
 
 		float mAmountPerDelta = 1000f;
 		float mDuration = 0f;
@@ -75,11 +78,15 @@ namespace uGUI {
 				}
 			}
 			if ((loopStyle == LoopStyle.Once) && (duration == 0f || mFactor > 1f || mFactor < 0f)) {
+				mFactor = Mathf.Clamp01(mFactor);
 				Sample(mFactor, true);
 				enabled = false;//finished.set script enable
-				if (eventRecevier != null && !string.IsNullOrEmpty(onFinished)) {
-					eventRecevier.Invoke(onFinished, 0);
+				if (onFinished != null) {
+					onFinished.Invoke();
 				}
+//				if (eventRecevier != null && !string.IsNullOrEmpty(onFinished)) {
+//					eventRecevier.Invoke(onFinished, 0);
+//				}
 			}
 			else {
 				Sample(mFactor, false);
@@ -108,12 +115,13 @@ namespace uGUI {
 		/// Reset this instance.
 		/// </summary>
 		public void Reset() {
+			enabled = true;
 			easeType = EaseType.linear;
 			loopStyle = LoopStyle.Once;
 			delay = 0f;
 			duration = 1f;
 			ignoreTimeScale = true;
-			eventRecevier = null;
+			//eventRecevier = null;
 			onFinished = null;
 			
 			mAmountPerDelta = 1000f;
@@ -138,5 +146,30 @@ namespace uGUI {
 			comp.enabled = true;
 			return comp;
 		}
+
+		public void Play(PlayDirection dir = PlayDirection.Forward) {
+			mAmountPerDelta = (dir == PlayDirection.Reverse)? - Mathf.Abs(amountPerDelta): Mathf.Abs(amountPerDelta);
+			enabled = true;
+			Update();
+		}
+
+		public void Toggle() {
+			mAmountPerDelta *= -1;
+			enabled = true;
+		}
+
+
+		[ContextMenu("Set 'From' to current value")]
+		public virtual void SetStartToCurrentValue () {}
+		
+		[ContextMenu("Set 'To' to current value")]
+		public virtual void SetEndToCurrentValue () {}
+		
+		[ContextMenu("Assume value of 'From'")]
+		public virtual void SetCurrentValueToStart () {}
+		
+		[ContextMenu("Assume value of 'To'")]
+		public virtual void SetCurrentValueToEnd () {}
+
 	}
 }

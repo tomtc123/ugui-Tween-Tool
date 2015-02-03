@@ -2,7 +2,9 @@
 using UnityEngine.UI;
 using System.Collections;
 
-namespace uGUI {
+namespace uTools {
+	[AddComponentMenu("uTools/Tween/Tween Text(uTools)")]	
+	
 	public class uTweenText : uTweenValue {
 
 		private Text mText;

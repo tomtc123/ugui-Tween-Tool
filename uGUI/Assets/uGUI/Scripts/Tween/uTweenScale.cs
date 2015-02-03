@@ -2,7 +2,9 @@
 using UnityEngine.UI;
 using System.Collections;
 
-namespace uGUI {
+namespace uTools {
+	[AddComponentMenu("uTools/Tween/Tween Scale(uTools)")]
+	
 	public class uTweenScale : uTweener {
 
 		public Vector3 from = Vector3.zero;

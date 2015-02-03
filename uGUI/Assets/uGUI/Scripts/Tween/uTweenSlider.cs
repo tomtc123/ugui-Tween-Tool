@@ -2,7 +2,8 @@
 using UnityEngine.UI;
 using System.Collections;
 
-namespace uGUI {
+namespace uTools {
+	[AddComponentMenu("uTools/Tween/Tween Slider(uTools)")]	
 	public class uTweenSlider : uTweenValue {
 
 		private Slider mSlider;

@@ -2,7 +2,8 @@
 using UnityEngine.UI;
 using System.Collections;
 
-namespace uGUI {
+namespace uTools {
+	[AddComponentMenu("uTools/Tween/Tween Position(uTools)")]
 	public class uTweenPosition : uTweener {
 		
 		public Vector3 from;
@@ -33,5 +34,18 @@ namespace uGUI {
 			}
 			return comp;
 		}
+
+		[ContextMenu("Set 'From' to current value")]
+		public override void SetStartToCurrentValue () { from = value; }
+		
+		[ContextMenu("Set 'To' to current value")]
+		public override void SetEndToCurrentValue () { to = value; }
+		
+		[ContextMenu("Assume value of 'From'")]
+		public override void SetCurrentValueToStart () { value = from; }
+		
+		[ContextMenu("Assume value of 'To'")]
+		public override void SetCurrentValueToEnd () { value = to; }
+
 	}
 }
