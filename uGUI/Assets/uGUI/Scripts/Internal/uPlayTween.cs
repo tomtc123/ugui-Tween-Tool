@@ -7,7 +7,7 @@ namespace uTools {
 	[AddComponentMenu("uTools/Internal/Play Tween(uTools)")]
 	public class uPlayTween : MonoBehaviour, uIPointHandler {
 		public uTweener tweenTarget;
-		public PlayDirection playDirection = PlayDirection.Forward;
+        public Direction playDirection = Direction.Forward;
 		public Trigger trigger = Trigger.OnPointerClick;
 
 		// Use this for initialization
@@ -47,11 +47,12 @@ namespace uTools {
 		/// Play this instance.
 		/// </summary>
 		private void Play() {
-			if (playDirection == PlayDirection.Toggle) {
+            if (playDirection == Direction.Toggle)
+            {
 				tweenTarget.Toggle();
 			}
 			else {
-				tweenTarget.Play(playDirection);
+                tweenTarget.Play(playDirection == Direction.Forward);
 			}
 		}
 

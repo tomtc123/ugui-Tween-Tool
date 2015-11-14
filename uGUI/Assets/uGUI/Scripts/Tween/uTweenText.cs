@@ -10,9 +10,8 @@ namespace uTools {
 		private Text mText;
 		public Text cacheText {
 			get {
-				mText = GetComponent<Text>();
 				if (mText == null) {
-					Debug.LogError("'uTweenText' can't find 'Text'");
+					mText = GetComponent<Text>();
 				}
 				return mText;
 			}

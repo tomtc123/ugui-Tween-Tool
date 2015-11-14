@@ -51,7 +51,7 @@ namespace uTools {
 			if (mText != null){
 				mText.color = _color;
 			}
-			mLight = _transform.light;
+			mLight = _transform.GetComponent<Light>();
 			if (mLight != null){ 
 				mLight.color = _color;
 			}
@@ -63,8 +63,8 @@ namespace uTools {
 			if (mSpriteRender != null) {
 				mSpriteRender.color = _color;
 			}
-			if (_transform.renderer != null) {
-				mMat = _transform.renderer.material;
+			if (_transform.GetComponent<Renderer>() != null) {
+				mMat = _transform.GetComponent<Renderer>().material;
 				if (mMat != null) {
 					mMat.color = _color;
 				}

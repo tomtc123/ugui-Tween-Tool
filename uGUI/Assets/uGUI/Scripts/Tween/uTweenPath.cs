@@ -43,7 +43,7 @@ namespace uTools {
 				if (mIndex != value) {
 					mIndex = value;
 					Debug.Log(target.localPosition);
-					uTweenPosition.Begin(target.gameObject, target.localPosition, paths[mIndex], duration/paths.Count).loopStyle = LoopStyle.Loop;
+					uTweenPosition.Begin(target.gameObject, target.localPosition, paths[mIndex], duration/paths.Count).style = Style.Loop;
 				}
 			}
 		}

@@ -13,8 +13,8 @@ namespace uTools {
 		
 		public RectTransform cachedRectTransform { get { if (mRectTransform == null) mRectTransform = GetComponent<RectTransform>(); return mRectTransform;}}
 		public Vector3 value {
-			get { return cachedRectTransform.localPosition;}
-			set { cachedRectTransform.localPosition = value;}
+			get { return cachedRectTransform.anchoredPosition;}
+			set { cachedRectTransform.anchoredPosition = value;}
 		}
 		
 		protected override void OnUpdate (float factor, bool isFinished)
@@ -36,7 +36,7 @@ namespace uTools {
 		}
 
 		[ContextMenu("Set 'From' to current value")]
-		public override void SetStartToCurrentValue () { from = value; }
+        public override void SetStartToCurrentValue() { from = value; }
 		
 		[ContextMenu("Set 'To' to current value")]
 		public override void SetEndToCurrentValue () { to = value; }

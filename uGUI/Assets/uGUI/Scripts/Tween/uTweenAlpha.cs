@@ -6,6 +6,9 @@ namespace uTools {
 	[AddComponentMenu("uTools/Tween/Tween Alpha(uTools)")]
 	public class uTweenAlpha : uTweenValue {
 
+		[HideInInspector]
+		Transform mTransform;
+
 		public bool includeChilds = false;
 
 		private Text mText;
@@ -16,12 +19,23 @@ namespace uTools {
 
 		float mAlpha = 0f;
 
+		protected override void Start ()
+		{
+			mTransform = transform;
+			mText = mTransform.GetComponent<Text> ();
+			mLight = mTransform.GetComponent<Light>();
+			mImage = mTransform.GetComponent<Image> ();
+			mSpriteRender = mTransform.GetComponent<SpriteRenderer> ();
+			
+			base.Start ();
+		}
+
 		public float alpha {
 			get {
 				return mAlpha;
 			}
 			set {
-				SetAlpha(transform, value);
+				SetAlpha(mTransform, value);
 				mAlpha = value;
 			}
 		}
@@ -33,32 +47,28 @@ namespace uTools {
 
 		void SetAlpha(Transform _transform, float _alpha) {
 			Color c = Color.white;
-			mText = _transform.GetComponent<Text> ();
 			if (mText != null){
 				c = mText.color;
 				c.a = _alpha;
 				mText.color = c;
 			}
-			mLight = _transform.light;
 			if (mLight != null){ 
 				c = mLight.color;
 				c.a = _alpha;
 				mLight.color = c;
 			}
-			mImage = _transform.GetComponent<Image> ();
 			if (mImage != null) {
 				c = mImage.color;
 				c.a = _alpha;
 				mImage.color = c;
 			}
-			mSpriteRender = _transform.GetComponent<SpriteRenderer> ();
 			if (mSpriteRender != null) {
 				c = mSpriteRender.color;
 				c.a = _alpha;
 				mSpriteRender.color = c;
 			}
-			if (_transform.renderer != null) {
-				mMat = _transform.renderer.material;
+			if (_transform.GetComponent<Renderer>() != null) {
+				mMat = _transform.GetComponent<Renderer>().material;
 				if (mMat != null) {
 					c = mMat.color;
 					c.a = _alpha;
@@ -73,8 +83,6 @@ namespace uTools {
 			}
 
 		}
-
-
 
 	}
 
