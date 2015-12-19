@@ -5,18 +5,24 @@ using System.Collections;
 namespace uTools {
 	[AddComponentMenu("uTools/Tween/Tween Color(uTools)")]
 	public class uTweenColor : uTweener {
-
+		
+		public GameObject target;
 		public Color from = Color.white;
 		public Color to = Color.white;
-		public bool includeChilds = false;
+		public bool includeChildren = false;
 
-		private Text mText;
-		private Light mLight;
-		private Material mMat;
-		private Image mImage;
-		private SpriteRenderer mSpriteRender;
+		Graphic[] mGraphics;
 
 		Color mColor = Color.white;
+
+		protected override void Start ()
+		{
+			if (target == null) {
+				target = gameObject;
+			}
+			mGraphics = includeChildren?target.GetComponentsInChildren<Graphic>() : target.GetComponents<Graphic>();
+			base.Start ();
+		}
 
 		public Color colorValue {
 			get {
@@ -47,35 +53,9 @@ namespace uTools {
 		}
 
 		void SetColor(Transform _transform, Color _color) {
-			mText = _transform.GetComponent<Text> ();
-			if (mText != null){
-				mText.color = _color;
-			}
-			mLight = _transform.GetComponent<Light>();
-			if (mLight != null){ 
-				mLight.color = _color;
-			}
-			mImage = _transform.GetComponent<Image> ();
-			if (mImage != null) {
-				mImage.color = _color;
-			}
-			mSpriteRender = _transform.GetComponent<SpriteRenderer> ();
-			if (mSpriteRender != null) {
-				mSpriteRender.color = _color;
-			}
-			if (_transform.GetComponent<Renderer>() != null) {
-				mMat = _transform.GetComponent<Renderer>().material;
-				if (mMat != null) {
-					mMat.color = _color;
-				}
-			}
-			if (includeChilds) {
-				for (int i = 0; i < _transform.childCount; ++i) {
-					Transform child = _transform.GetChild(i);
-					SetColor(child, _color);
-				}
-			}
-			
+			foreach (var item in mGraphics) {
+				item.color = _color;
+			}			
 		}
 
 
