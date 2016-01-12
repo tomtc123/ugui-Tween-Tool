@@ -4,11 +4,9 @@ using System.Collections;
 
 namespace uTools {
 	[AddComponentMenu("uTools/Tween/Tween Color(uTools)")]
-	public class uTweenColor : uTweener {
+	public class uTweenColor : uTween<Color> {
 		
 		public GameObject target;
-		public Color from = Color.white;
-		public Color to = Color.white;
 		public bool includeChildren = false;
 
 		Graphic[] mGraphics;
@@ -24,7 +22,7 @@ namespace uTools {
 			base.Start ();
 		}
 
-		public Color colorValue {
+		public override Color value {
 			get {
 				return mColor;
 			}
@@ -36,23 +34,27 @@ namespace uTools {
 
 		protected override void OnUpdate (float factor, bool isFinished)
 		{
-			colorValue = Color.Lerp(from, to, factor);
+            value = Color.Lerp(from, to, factor);
 		}
 
-		public static uTweenColor Begin(GameObject go, float duration, float delay, Color from, Color to) {
-			uTweenColor comp = uTweener.Begin<uTweenColor>(go, duration);
-			comp.from = from;
-			comp.to = to;
-			comp.delay = delay;
-			
-			if (duration <=0) {
-				comp.Sample(1, true);
-				comp.enabled = false;
-			}
-			return comp;
-		}
+        public static uTweenColor Begin(GameObject go, Color from, Color to, float duration = 1f, float delay = 0f)
+        {
+            uTweenColor comp = uTweener.Begin<uTweenColor>(go, duration);
+            comp.value = from;
+            comp.value = from;
+            comp.from = from;
+            comp.to = to;
+            comp.duration = duration;
+            comp.delay = delay;
+            if (duration <= 0)
+            {
+                comp.Sample(1, true);
+                comp.enabled = false;
+            }
+            return comp;
+        }
 
-		void SetColor(Transform _transform, Color _color) {
+        void SetColor(Transform _transform, Color _color) {
 			foreach (var item in mGraphics) {
 				item.color = _color;
 			}			

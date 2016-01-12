@@ -5,18 +5,7 @@ using System.Collections;
 namespace uTools {
 	[AddComponentMenu("uTools/Tween/Tween Width(uTools)")]	
 	
-	public class uTweenRect : uTweener {
-
-		public Vector2 from;
-		public Vector2 to;
-
-		Vector2 mValue;
-		public Vector2 value {
-			get { return mValue;}
-			set { 
-				mValue = value;
-			}
-		}
+	public class uTweenRect : uTween<Vector2> {
 
 		private RectTransform mRectTransform;
 		public RectTransform cacheRectTransform {
@@ -33,8 +22,9 @@ namespace uTools {
 			cacheRectTransform.sizeDelta = value;
 		}
 
-		public static uTweenRect Begin(RectTransform go, float duration, float delay, Vector2 from, Vector2 to) {
+		public static uTweenRect Begin(RectTransform go, Vector2 from, Vector2 to, float duration, float delay) {
 			uTweenRect comp = uTweener.Begin<uTweenRect>(go.gameObject, duration);
+            comp.value = from;
 			comp.from = from;
 			comp.to = to;
 			comp.delay = delay;

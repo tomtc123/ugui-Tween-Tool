@@ -5,7 +5,7 @@ using System.Collections;
 namespace uTools {
 	[AddComponentMenu("uTools/Tween/Tween Text(uTools)")]	
 	
-	public class uTweenText : uTweenValue {
+	public class uTweenText : uTween<float> {
 
 		private Text mText;
 		public Text cacheText {
@@ -22,13 +22,14 @@ namespace uTools {
 		/// </summary>
 		public int digits;
 
-		protected override void ValueUpdate (float value, bool isFinished)
+		protected override void OnUpdate(float value, bool isFinished)
 		{
 			cacheText.text = (System.Math.Round(value, digits)).ToString();
 		}
 
-		public static uTweenText Begin(Text label, float duration, float delay, float from, float to) {
+		public static uTweenText Begin(Text label, float from, float to, float duration, float delay) {
 			uTweenText comp = uTweener.Begin<uTweenText>(label.gameObject, duration);
+            comp.value = from;
 			comp.from = from;
 			comp.to = to;
 			comp.delay = delay;

@@ -38,8 +38,9 @@ namespace uTools {
 			cacheImage.fillAmount = value;
 		}
 
-		public static uTweenImage Begin(Image go, float duration, float delay, float from, float to) {
+		public static uTweenImage Begin(Image go, float from, float to, float duration, float delay) {
 			uTweenImage comp = uTweener.Begin<uTweenImage>(go.gameObject, duration);
+            comp.value = from;
 			comp.from = from;
 			comp.to = to;
 			comp.delay = delay;

@@ -4,15 +4,12 @@ using System.Collections;
 
 namespace uTools {
 	[AddComponentMenu("uTools/Tween/Tween Position(uTools)")]
-	public class uTweenPosition : uTweener {
-		
-		public Vector3 from;
-		public Vector3 to;
-		
+	public class uTweenPosition : uTween<Vector3> {
+        		
 		RectTransform mRectTransform;
 		
 		public RectTransform cachedRectTransform { get { if (mRectTransform == null) mRectTransform = GetComponent<RectTransform>(); return mRectTransform;}}
-		public Vector3 value {
+		public override Vector3 value {
 			get { return cachedRectTransform.anchoredPosition;}
 			set { cachedRectTransform.anchoredPosition = value;}
 		}
@@ -24,6 +21,7 @@ namespace uTools {
 		
 		public static uTweenPosition Begin(GameObject go, Vector3 from, Vector3 to, float duration = 1f, float delay = 0f) {
 			uTweenPosition comp = uTweener.Begin<uTweenPosition>(go, duration);
+            comp.value = from;
 			comp.from = from;
 			comp.to = to;
 			comp.duration = duration;
@@ -34,18 +32,5 @@ namespace uTools {
 			}
 			return comp;
 		}
-
-		[ContextMenu("Set 'From' to current value")]
-        public override void SetStartToCurrentValue() { from = value; }
-		
-		[ContextMenu("Set 'To' to current value")]
-		public override void SetEndToCurrentValue () { to = value; }
-		
-		[ContextMenu("Assume value of 'From'")]
-		public override void SetCurrentValueToStart () { value = from; }
-		
-		[ContextMenu("Assume value of 'To'")]
-		public override void SetCurrentValueToEnd () { value = to; }
-
 	}
 }

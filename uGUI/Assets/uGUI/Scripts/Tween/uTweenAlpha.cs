@@ -4,7 +4,7 @@ using System.Collections;
 
 namespace uTools {
 	[AddComponentMenu("uTools/Tween/Tween Alpha(uTools)")]
-	public class uTweenAlpha : uTweenValue {
+	public class uTweenAlpha : uTween<float> {
 
 		public GameObject target;
 		public bool includeChildren = false;
@@ -34,7 +34,7 @@ namespace uTools {
 			}
 		}
 
-		protected override void ValueUpdate (float value, bool isFinished)
+		protected override void OnUpdate (float value, bool isFinished)
 		{
 			alpha = value;
 		}
@@ -47,6 +47,23 @@ namespace uTools {
 			}
 		}
 
-	}
+        public static uTweenAlpha Begin(GameObject go, float from, float to, float duration = 1f, float delay = 0f)
+        {
+            uTweenAlpha comp = uTweener.Begin<uTweenAlpha>(go, duration);
+            comp.value = from;
+            comp.from = from;
+            comp.to = to;
+            comp.duration = duration;
+            comp.delay = delay;
+            if (duration <= 0)
+            {
+                comp.Sample(1, true);
+                comp.enabled = false;
+            }
+            return comp;
+        }
+
+
+    }
 
 }

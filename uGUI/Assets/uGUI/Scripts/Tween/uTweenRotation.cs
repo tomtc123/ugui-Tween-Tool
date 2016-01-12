@@ -4,9 +4,7 @@ using System.Collections;
 
 namespace uTools {
 	[AddComponentMenu("uTools/Tween/Tween Rotation(uTools)")]
-	public class uTweenRotation : uTweener {
-		public Vector3 from;
-		public Vector3 to;
+	public class uTweenRotation : uTween<Vector3> {
 
 		RectTransform mRectTransfrom;
 
@@ -24,22 +22,26 @@ namespace uTools {
 			}
 		}
 
-		public Quaternion value {
-			get { 
-				return cacheRectTransfrom.localRotation;
-			}
-			set {
-				cacheRectTransfrom.localRotation = value;
-			}
-		}
+        public Quaternion QuaternionValue
+        {
+            get
+            {
+                return cacheRectTransfrom.localRotation;
+            }
+            set
+            {
+                cacheRectTransfrom.localRotation = value;
+            }
+        }
 
 		protected override void OnUpdate (float _factor, bool _isFinished)
 		{
-			value = Quaternion.Euler(Vector3.Lerp(from, to, _factor));
+            QuaternionValue = Quaternion.Euler(Vector3.Lerp(from, to, _factor));
 		}
 
 		public static uTweenRotation Begin(GameObject go, Vector3 from, Vector3 to, float duration = 1f, float delay = 0f) {
 			uTweenRotation comp = uTweener.Begin<uTweenRotation>(go, duration);
+            comp.value = from;
 			comp.from = from;
 			comp.to = to;
 			comp.duration = duration;
