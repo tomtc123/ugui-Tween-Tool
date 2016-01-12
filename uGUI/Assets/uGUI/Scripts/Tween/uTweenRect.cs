@@ -23,7 +23,7 @@ namespace uTools {
 		}
 
 		public static uTweenRect Begin(RectTransform go, Vector2 from, Vector2 to, float duration, float delay) {
-			uTweenRect comp = uTweener.Begin<uTweenRect>(go.gameObject, duration);
+			uTweenRect comp = Begin<uTweenRect>(go.gameObject, duration);
             comp.value = from;
 			comp.from = from;
 			comp.to = to;

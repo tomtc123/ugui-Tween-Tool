@@ -39,7 +39,7 @@ namespace uTools {
 		}
 
 		public static uTweenImage Begin(Image go, float from, float to, float duration, float delay) {
-			uTweenImage comp = uTweener.Begin<uTweenImage>(go.gameObject, duration);
+			uTweenImage comp = Begin<uTweenImage>(go.gameObject, duration);
             comp.value = from;
 			comp.from = from;
 			comp.to = to;

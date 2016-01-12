@@ -22,7 +22,7 @@ namespace uTools {
 		}
 
 		public static uTweenScale Begin(GameObject go, Vector3 from, Vector3 to, float duration = 1f, float delay = 0f) {
-			uTweenScale comp = uTweener.Begin<uTweenScale>(go, duration);
+			uTweenScale comp = Begin<uTweenScale>(go, duration);
             comp.value = from;
 			comp.from = from;
 			comp.to = to;

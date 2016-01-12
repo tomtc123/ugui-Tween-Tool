@@ -40,7 +40,7 @@ namespace uTools {
 		}
 
 		public static uTweenSlider Begin(Slider slider, float from, float to, float duration, float delay) {
-			uTweenSlider comp = uTweener.Begin<uTweenSlider>(slider.gameObject, duration);
+			uTweenSlider comp = Begin<uTweenSlider>(slider.gameObject, duration);
             comp.value = from;
 			comp.from = from;
 			comp.to = to;

@@ -40,7 +40,7 @@ namespace uTools {
 		}
 
 		public static uTweenRotation Begin(GameObject go, Vector3 from, Vector3 to, float duration = 1f, float delay = 0f) {
-			uTweenRotation comp = uTweener.Begin<uTweenRotation>(go, duration);
+			uTweenRotation comp = Begin<uTweenRotation>(go, duration);
             comp.value = from;
 			comp.from = from;
 			comp.to = to;

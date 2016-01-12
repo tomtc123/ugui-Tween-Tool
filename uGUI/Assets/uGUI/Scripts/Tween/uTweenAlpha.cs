@@ -49,7 +49,7 @@ namespace uTools {
 
         public static uTweenAlpha Begin(GameObject go, float from, float to, float duration = 1f, float delay = 0f)
         {
-            uTweenAlpha comp = uTweener.Begin<uTweenAlpha>(go, duration);
+            uTweenAlpha comp = Begin<uTweenAlpha>(go, duration);
             comp.value = from;
             comp.from = from;
             comp.to = to;

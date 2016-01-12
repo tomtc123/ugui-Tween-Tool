@@ -20,7 +20,7 @@ namespace uTools {
 		}
 		
 		public static uTweenPosition Begin(GameObject go, Vector3 from, Vector3 to, float duration = 1f, float delay = 0f) {
-			uTweenPosition comp = uTweener.Begin<uTweenPosition>(go, duration);
+			uTweenPosition comp = Begin<uTweenPosition>(go, duration);
             comp.value = from;
 			comp.from = from;
 			comp.to = to;

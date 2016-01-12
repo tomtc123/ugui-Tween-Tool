@@ -28,7 +28,7 @@ namespace uTools {
 		}
 
 		public static uTweenText Begin(Text label, float from, float to, float duration, float delay) {
-			uTweenText comp = uTweener.Begin<uTweenText>(label.gameObject, duration);
+			uTweenText comp = Begin<uTweenText>(label.gameObject, duration);
             comp.value = from;
 			comp.from = from;
 			comp.to = to;

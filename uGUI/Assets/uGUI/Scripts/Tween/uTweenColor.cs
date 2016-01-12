@@ -39,7 +39,7 @@ namespace uTools {
 
         public static uTweenColor Begin(GameObject go, Color from, Color to, float duration = 1f, float delay = 0f)
         {
-            uTweenColor comp = uTweener.Begin<uTweenColor>(go, duration);
+            uTweenColor comp = Begin<uTweenColor>(go, duration);
             comp.value = from;
             comp.value = from;
             comp.from = from;
