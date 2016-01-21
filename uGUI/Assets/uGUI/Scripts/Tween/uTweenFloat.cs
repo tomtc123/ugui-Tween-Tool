@@ -10,9 +10,8 @@ namespace uTools {
             value = from + factor * (to - from);
 		}
 
-        public static uTweenFloat Begin(float from, float to, float duration, float delay)
+        public static uTweenFloat Begin(GameObject go, float from, float to, float duration, float delay)
         {
-            GameObject go = new GameObject("___uTweenFloat");
             uTweenFloat comp = Begin<uTweenFloat>(go, duration);
             comp.value = from;
 			comp.from = from;
