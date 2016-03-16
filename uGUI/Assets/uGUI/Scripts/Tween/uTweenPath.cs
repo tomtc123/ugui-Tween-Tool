@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 namespace uTools {
-	public class uTweenPath : uTweenValue {
+	public class uTweenPath : uTween<float> {
 
 		public RectTransform target;
 		public List<Vector3> paths;
@@ -30,7 +30,7 @@ namespace uTools {
 		}
 
 
-		protected override void ValueUpdate (float _factor, bool _isFinished)
+		protected override void OnUpdate (float _factor, bool _isFinished)
 		{
 			if (!mCache) { Cache();}
 			pathIndex = Mathf.FloorToInt(_factor);
@@ -43,7 +43,7 @@ namespace uTools {
 				if (mIndex != value) {
 					mIndex = value;
 					Debug.Log(target.localPosition);
-					uTweenPosition.Begin(target.gameObject, target.localPosition, paths[mIndex], duration/paths.Count).loopStyle = LoopStyle.Loop;
+					uTweenPosition.Begin(target.gameObject, target.localPosition, paths[mIndex], duration/paths.Count).style = Style.Loop;
 				}
 			}
 		}

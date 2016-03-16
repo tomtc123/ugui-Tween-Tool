@@ -1,175 +1,290 @@
 ﻿using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
-using System.Collections;
 
 /// <summary>
-/// Base of tween
+/// Base of tween.
 /// </summary>
-namespace uTools {
-	public abstract class uTweener : MonoBehaviour {
 
-		public AnimationCurve animationCurve = new AnimationCurve(new Keyframe(0f, 0f, 0f, 1f), new Keyframe(1f, 1f, 1f, 0f));
-		public EaseType easeType = EaseType.none;
-		public LoopStyle loopStyle = LoopStyle.Once;
-		public float delay = 0f;
-		public float duration = 1f;
-		public bool ignoreTimeScale = true;
-		//public MonoBehaviour eventRecevier = null;
-		public UnityEvent onFinished = null;
-		//public UnityEvent onFinishedCallBack;
+namespace uTools
+{
+    public abstract class uTweener : MonoBehaviour
+    {
+        static public uTweener current;
 
-		float mAmountPerDelta = 1000f;
-		float mDuration = 0f;
-		float mStartTime = -1f;
-		float mFactor = 0f;
+        public enum Style
+        {
+            Once,
+            Loop,
+            PingPong,
+        }
 
-		/// <summary>
-		/// Gets or sets the factor.
-		/// </summary>
-		/// <value>The factor.</value>
-		public float factor {
-			get { return mFactor;}
-			set { mFactor = Mathf.Clamp01(value);}
-		}
+        public EaseType method = EaseType.linear;
+        public Style style = Style.Once;
+        public AnimationCurve animationCurve = new AnimationCurve(new Keyframe(0f, 0f, 0f, 1f), new Keyframe(1f, 1f, 1f, 0f));
+        public bool ignoreTimeScale = true;
+        public float delay = 0f;
+        public float duration = 1f;
 
-		/// <summary>
-		/// Gets the amount per delta.
-		/// </summary>
-		/// <value>The amount per delta.</value>
-		public float amountPerDelta {
-			get {
-				if (mDuration != duration) {
-					mDuration = duration;
-					mAmountPerDelta = duration > 0 ? 1f/duration: 1000f;
-				}
-				return mAmountPerDelta;
-			}
-		}
+        [HideInInspector]
+        public bool steeperCurves = false;
 
-		// Use this for initialization
-		void Start () {
-			Update ();
-		}
-		
-		// Update is called once per frame
-		void Update () {
-			float delta = ignoreTimeScale?Time.unscaledDeltaTime : Time.deltaTime;
-			float time = ignoreTimeScale?Time.unscaledTime : Time.time;
-			if (mStartTime < 0) {
-				mStartTime = time + delay;
-			}
-			if (time < mStartTime) return;
-			mFactor += amountPerDelta * delta;
-			if (loopStyle == LoopStyle.Loop) {
-				if (mFactor > 1f) {
-					mFactor -= Mathf.Floor(mFactor);
-				}
-			}
-			else if (loopStyle == LoopStyle.PingPong) {
-				if (mFactor > 1f) {
-					mFactor = 1f - (mFactor - Mathf.Floor(mFactor));
-					mAmountPerDelta = - mAmountPerDelta;
-				}
-				else if (mFactor < 0f) {
-					mFactor = -mFactor;
-					mFactor -= Mathf.Floor(mFactor);
-					mAmountPerDelta = - mAmountPerDelta;
-				}
-			}
-			if ((loopStyle == LoopStyle.Once) && (duration == 0f || mFactor > 1f || mFactor < 0f)) {
-				mFactor = Mathf.Clamp01(mFactor);
-				Sample(mFactor, true);
-				enabled = false;//finished.set script enable
-				if (onFinished != null) {
-					onFinished.Invoke();
-				}
-//				if (eventRecevier != null && !string.IsNullOrEmpty(onFinished)) {
-//					eventRecevier.Invoke(onFinished, 0);
-//				}
-			}
-			else {
-				Sample(mFactor, false);
-			}
-		}
+        public int tweenGroup = 0;
+        public UnityEvent onFinished = null;
+        public UnityAction onValueChange = null;
 
-		/// <summary>
-		/// Sample the specified _factor and _isFinished.
-		/// </summary>
-		/// <param name="_factor">_factor.</param>
-		/// <param name="_isFinished">If set to <c>true</c> _is finished.</param>
-		public void Sample(float _factor, bool _isFinished) {
-			float val = Mathf.Clamp01(_factor);
-			val = (easeType == EaseType.none) ? animationCurve.Evaluate(val): EaseManager.EasingFromType(0, 1, val, easeType);
-			OnUpdate(val, _isFinished);
-		}
+        [HideInInspector]
+        public GameObject eventReceiver;
+		[HideInInspector]
+        public string callWhenFinished;
 
-		/// <summary>
-		/// Raises the update event.
-		/// </summary>
-		/// <param name="_factor">_factor.</param>
-		/// <param name="_isFinished">If set to <c>true</c> _is finished.</param>
-		protected virtual void OnUpdate(float _factor, bool _isFinished) {}
+        bool mStarted = false;
+        float mStartTime = 0f;
+        float mDuration = 0f;
+        float mAmountPerDelta = 1000f;
+        float mFactor = 0f;
 
-		/// <summary>
-		/// Reset this instance.
-		/// </summary>
-		public void Reset() {
-			enabled = true;
-			easeType = EaseType.linear;
-			loopStyle = LoopStyle.Once;
-			delay = 0f;
-			duration = 1f;
-			ignoreTimeScale = true;
-			//eventRecevier = null;
-			onFinished = null;
-			
-			mAmountPerDelta = 1000f;
-			mDuration = 0f;
-			mStartTime = -1f;
-			mFactor = 0f;
-		}
+        /// <summary>
+        /// Amount advanced per delta time.
+        /// </summary>
 
-		/// <summary>
-		/// Begin the specified _go and _duration.
-		/// </summary>
-		/// <param name="_go">_go.</param>
-		/// <param name="_duration">_duration.</param>
-		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public static T Begin<T>(GameObject _go, float _duration) where T : uTweener {
-			T comp = _go.GetComponent<T>();
-			if (comp == null) {
-				comp = _go.AddComponent<T>();
-			}
-			comp.Reset();
-			comp.duration = _duration;
-			comp.enabled = true;
-			return comp;
-		}
+        public float amountPerDelta
+        {
+            get
+            {
+                if (mDuration != duration)
+                {
+                    mDuration = duration;
+                    mAmountPerDelta = Mathf.Abs((duration > 0f) ? 1f / duration : 1000f) * Mathf.Sign(mAmountPerDelta);
+                }
+                return mAmountPerDelta;
+            }
+        }
 
-		public void Play(PlayDirection dir = PlayDirection.Forward) {
-			mAmountPerDelta = (dir == PlayDirection.Reverse)? - Mathf.Abs(amountPerDelta): Mathf.Abs(amountPerDelta);
-			enabled = true;
-			Update();
-		}
+        public float tweenFactor { get { return mFactor; } set { mFactor = Mathf.Clamp01(value); } }
 
-		public void Toggle() {
-			mAmountPerDelta *= -1;
-			enabled = true;
-		}
+        public Direction direction { get { return amountPerDelta < 0f ? Direction.Reverse : Direction.Forward; } }
 
+        void Reset()
+        {
+            if (!mStarted)
+            {
+                SetStartToCurrentValue();
+                SetEndToCurrentValue();
+            }
+        }
 
-		[ContextMenu("Set 'From' to current value")]
-		public virtual void SetStartToCurrentValue () {}
-		
-		[ContextMenu("Set 'To' to current value")]
-		public virtual void SetEndToCurrentValue () {}
-		
-		[ContextMenu("Assume value of 'From'")]
-		public virtual void SetCurrentValueToStart () {}
-		
-		[ContextMenu("Assume value of 'To'")]
-		public virtual void SetCurrentValueToEnd () {}
+        protected virtual void Start() { Update(); }
 
-	}
+        void Update()
+        {
+            float delta = ignoreTimeScale ? Time.unscaledDeltaTime : Time.deltaTime;
+            float time = ignoreTimeScale ? Time.unscaledTime : Time.time;
+
+            if (!mStarted)
+            {
+                mStarted = true;
+                mStartTime = time + delay;
+            }
+
+            if (time < mStartTime) return;
+
+            // Advance the sampling factor
+            mFactor += amountPerDelta * delta;
+
+            // Loop style simply resets the play factor after it exceeds 1.
+            if (style == Style.Loop)
+            {
+                if (mFactor > 1f)
+                {
+                    mFactor -= Mathf.Floor(mFactor);
+                }
+            }
+            else if (style == Style.PingPong)
+            {
+                // Ping-pong style reverses the direction
+                if (mFactor > 1f)
+                {
+                    mFactor = 1f - (mFactor - Mathf.Floor(mFactor));
+                    mAmountPerDelta = -mAmountPerDelta;
+                }
+                else if (mFactor < 0f)
+                {
+                    mFactor = -mFactor;
+                    mFactor -= Mathf.Floor(mFactor);
+                    mAmountPerDelta = -mAmountPerDelta;
+                }
+            }
+
+            // If the factor goes out of range and this is a one-time tweening operation, disable the script
+            if ((style == Style.Once) && (duration == 0f || mFactor > 1f || mFactor < 0f))
+            {
+                mFactor = Mathf.Clamp01(mFactor);
+                Sample(mFactor, true);
+                enabled = false;
+
+                if (current != this)
+                {
+                    uTweener before = current;
+                    current = this;
+
+                    if (onFinished != null)
+                    {
+                        onFinished.Invoke();
+                    }
+
+                    // Deprecated legacy functionality support
+                    if (eventReceiver != null && !string.IsNullOrEmpty(callWhenFinished))
+                        eventReceiver.SendMessage(callWhenFinished, this, SendMessageOptions.DontRequireReceiver);
+
+                    current = before;
+                }
+            }
+            else Sample(mFactor, false);
+        }
+
+        public void SetOnFinished(UnityEvent finishedCallBack) { onFinished = finishedCallBack; }
+
+        public void AddOnFinished(UnityEvent finishedCallBack) {  }
+
+        public void RemoveOnFinished(UnityEvent finishedCallBack)
+        {
+           
+        }
+
+        void OnDisable() { mStarted = false; }
+
+        /// <summary>
+        /// Sample the tween at the specified factor.
+        /// </summary>
+
+        public void Sample(float factor, bool isFinished)
+        {
+            // Calculate the sampling value
+            float val = Mathf.Clamp01(factor);
+
+            val = (method == EaseType.none) ? animationCurve.Evaluate(val) : EaseManager.EasingFromType(0, 1, val, method);
+
+            // Call the virtual update
+            OnUpdate((method == EaseType.none) ? animationCurve.Evaluate(val) : val, isFinished);
+            if (onValueChange != null)
+            {
+                onValueChange.Invoke();
+            }
+        }
+
+        /// <summary>
+        /// Play the tween forward.
+        /// </summary>
+
+        public void PlayForward() { Play(true); }
+
+        /// <summary>
+        /// Play the tween in reverse.
+        /// </summary>
+
+        public void PlayReverse() { Play(false); }
+
+        /// <summary>
+        /// Manually activate the tweening process, reversing it if necessary.
+        /// </summary>
+
+        public void Play(bool forward)
+        {
+            mAmountPerDelta = Mathf.Abs(amountPerDelta);
+            if (!forward) mAmountPerDelta = -mAmountPerDelta;
+            enabled = true;
+            Update();
+        }
+
+        /// <summary>
+        /// Manually reset the tweener's state to the beginning.
+        /// If the tween is playing forward, this means the tween's start.
+        /// If the tween is playing in reverse, this means the tween's end.
+        /// </summary>
+
+        public void ResetToBeginning()
+        {
+            mStarted = false;
+            mFactor = (amountPerDelta < 0f) ? 1f : 0f;
+            Sample(mFactor, false);
+        }
+
+        /// <summary>
+        /// Manually start the tweening process, reversing its direction.
+        /// </summary>
+
+        public void Toggle()
+        {
+            if (mFactor > 0f)
+            {
+                mAmountPerDelta = -amountPerDelta;
+            }
+            else
+            {
+                mAmountPerDelta = Mathf.Abs(amountPerDelta);
+            }
+            enabled = true;
+        }
+
+        /// <summary>
+        /// Actual tweening logic should go here.
+        /// </summary>
+
+        abstract protected void OnUpdate(float factor, bool isFinished);
+
+        /// <summary>
+        /// Starts the tweening operation.
+        /// </summary>
+
+        static public T Begin<T>(GameObject go, float duration) where T : uTweener
+        {
+            T comp = go.GetComponent<T>();
+#if UNITY_FLASH
+		if ((object)comp == null) comp = (T)go.AddComponent<T>();
+#else
+            // Find the tween with an unset group ID (group ID of 0).
+            if (comp != null && comp.tweenGroup != 0)
+            {
+                comp = null;
+                T[] comps = go.GetComponents<T>();
+                for (int i = 0, imax = comps.Length; i < imax; ++i)
+                {
+                    comp = comps[i];
+                    if (comp != null && comp.tweenGroup == 0) break;
+                    comp = null;
+                }
+            }
+
+            if (comp == null)
+            {
+                comp = go.AddComponent<T>();
+
+                if (comp == null)
+                {
+                    Debug.LogError("Unable to add " + typeof(T) + " to " + go);
+                    return null;
+                }
+            }
+#endif
+            comp.mStarted = false;
+            comp.duration = duration;
+            comp.mFactor = 0f;
+            comp.mAmountPerDelta = Mathf.Abs(comp.amountPerDelta);
+            comp.style = Style.Once;
+            comp.animationCurve = new AnimationCurve(new Keyframe(0f, 0f, 0f, 1f), new Keyframe(1f, 1f, 1f, 0f));
+            comp.eventReceiver = null;
+            comp.callWhenFinished = null;
+            comp.enabled = true;
+            return comp;
+        }
+        
+        public virtual void SetStartToCurrentValue() { }
+        public virtual void SetEndToCurrentValue() { }
+        public virtual void SetCurrentValueToStart() { }
+        public virtual void SetCurrentValueToEnd() { }
+    }
+
 }

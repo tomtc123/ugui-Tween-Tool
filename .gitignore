@@ -47,3 +47,7 @@ Temporary Items
 /uGUI/uGUI.userprefs
 /uGUI/uGUI-csharp.sln
 /uGUI/Library
+uGUI/Temp/
+uGUI/obj/
+uGUI/Assets/Test/
+uGUI/Assets/Test.meta

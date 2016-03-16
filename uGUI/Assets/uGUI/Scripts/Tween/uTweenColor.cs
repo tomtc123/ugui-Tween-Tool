@@ -4,21 +4,25 @@ using System.Collections;
 
 namespace uTools {
 	[AddComponentMenu("uTools/Tween/Tween Color(uTools)")]
-	public class uTweenColor : uTweener {
+	public class uTweenColor : uTween<Color> {
+		
+		public GameObject target;
+		public bool includeChildren = false;
 
-		public Color from = Color.white;
-		public Color to = Color.white;
-		public bool includeChilds = false;
-
-		private Text mText;
-		private Light mLight;
-		private Material mMat;
-		private Image mImage;
-		private SpriteRenderer mSpriteRender;
+		Graphic[] mGraphics;
 
 		Color mColor = Color.white;
 
-		public Color colorValue {
+		protected override void Start ()
+		{
+			if (target == null) {
+				target = gameObject;
+			}
+			mGraphics = includeChildren?target.GetComponentsInChildren<Graphic>() : target.GetComponents<Graphic>();
+			base.Start ();
+		}
+
+		public override Color value {
 			get {
 				return mColor;
 			}
@@ -30,52 +34,30 @@ namespace uTools {
 
 		protected override void OnUpdate (float factor, bool isFinished)
 		{
-			colorValue = Color.Lerp(from, to, factor);
+            value = Color.Lerp(from, to, factor);
 		}
 
-		public static uTweenColor Begin(GameObject go, float duration, float delay, Color from, Color to) {
-			uTweenColor comp = uTweener.Begin<uTweenColor>(go, duration);
-			comp.from = from;
-			comp.to = to;
-			comp.delay = delay;
-			
-			if (duration <=0) {
-				comp.Sample(1, true);
-				comp.enabled = false;
-			}
-			return comp;
-		}
+        public static uTweenColor Begin(GameObject go, Color from, Color to, float duration = 1f, float delay = 0f)
+        {
+            uTweenColor comp = Begin<uTweenColor>(go, duration);
+            comp.value = from;
+            comp.value = from;
+            comp.from = from;
+            comp.to = to;
+            comp.duration = duration;
+            comp.delay = delay;
+            if (duration <= 0)
+            {
+                comp.Sample(1, true);
+                comp.enabled = false;
+            }
+            return comp;
+        }
 
-		void SetColor(Transform _transform, Color _color) {
-			mText = _transform.GetComponent<Text> ();
-			if (mText != null){
-				mText.color = _color;
-			}
-			mLight = _transform.light;
-			if (mLight != null){ 
-				mLight.color = _color;
-			}
-			mImage = _transform.GetComponent<Image> ();
-			if (mImage != null) {
-				mImage.color = _color;
-			}
-			mSpriteRender = _transform.GetComponent<SpriteRenderer> ();
-			if (mSpriteRender != null) {
-				mSpriteRender.color = _color;
-			}
-			if (_transform.renderer != null) {
-				mMat = _transform.renderer.material;
-				if (mMat != null) {
-					mMat.color = _color;
-				}
-			}
-			if (includeChilds) {
-				for (int i = 0; i < _transform.childCount; ++i) {
-					Transform child = _transform.GetChild(i);
-					SetColor(child, _color);
-				}
-			}
-			
+        void SetColor(Transform _transform, Color _color) {
+			foreach (var item in mGraphics) {
+				item.color = _color;
+			}			
 		}
 
 
