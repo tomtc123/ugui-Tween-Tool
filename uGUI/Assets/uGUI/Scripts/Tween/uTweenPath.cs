@@ -8,6 +8,7 @@ namespace uTools
     {
         public Transform target;
         public Vector3[] path;
+        public bool isWorld = false;
         private float from = 0f;
         private float to = 1f;
         private List<Vector3> pathPoints = new List<Vector3>();
@@ -24,7 +25,14 @@ namespace uTools
                 mValue = value;
                 if (target != null)
                 {
-                    target.position = GetCRSPoint(mValue);
+                    if (isWorld)
+                    {
+                        target.position = GetCRSPoint(mValue);
+                    }
+                    else
+                    {
+                        target.localPosition = GetCRSPoint(mValue);
+                    }
                 }
             }
         }
@@ -85,6 +93,10 @@ namespace uTools
 
         public void OnDrawGizmos()
         {
+            if (path == null)
+            {
+                return;
+            }
             for (int i = 0; i < path.Length; i++)
             {
                 Gizmos.DrawWireSphere(path[i], 1f);
