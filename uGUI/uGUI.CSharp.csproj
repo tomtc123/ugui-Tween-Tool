@@ -58,12 +58,6 @@
     <Reference Include="UnityEngine.Networking">
       <HintPath>Library\UnityAssemblies\UnityEngine.Networking.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.Networking">
-      <HintPath>Library\UnityAssemblies\UnityEngine.Networking.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.UI">
-      <HintPath>Library\UnityAssemblies\UnityEngine.UI.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEditor">
       <HintPath>Library\UnityAssemblies\UnityEditor.dll</HintPath>
     </Reference>
@@ -72,6 +66,7 @@
     <Compile Include="Assets\uGUI\Scripts\Internal\uDragObject.cs" />
     <Compile Include="Assets\uGUI\Scripts\Internal\uEnum.cs" />
     <Compile Include="Assets\uGUI\Scripts\Internal\uPlayTween.cs" />
+    <Compile Include="Assets\uGUI\Scripts\Tween\Bezier.cs" />
     <Compile Include="Assets\uGUI\Scripts\Tween\EaseManager.cs" />
     <Compile Include="Assets\uGUI\Scripts\Tween\uButtonScale.cs" />
     <Compile Include="Assets\uGUI\Scripts\Tween\uIPointHandler.cs" />
