@@ -5,16 +5,16 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{79364F63-9187-B712-BF18-2E4849DAD83B}</ProjectGuid>
+    <ProjectGuid>{3100B933-E8E1-693D-1EA1-9391E4D80262}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <AssemblyName>Assembly-CSharp</AssemblyName>
+    <AssemblyName>Assembly-CSharp-Editor</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
+    <TargetFrameworkProfile>Unity Full v3.5</TargetFrameworkProfile>
     <CompilerResponseFile></CompilerResponseFile>
-    <UnityProjectType>Game:1</UnityProjectType>
+    <UnityProjectType>Editor:5</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows:5</UnityBuildTarget>
     <UnityVersion>5.3.1f1</UnityVersion>
     <RootNamespace></RootNamespace>
@@ -51,45 +51,57 @@
     <Reference Include="UnityEngine">
       <HintPath>Library\UnityAssemblies\UnityEngine.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEditor">
+      <HintPath>Library\UnityAssemblies\UnityEditor.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.Advertisements">
+      <HintPath>Library\UnityAssemblies\UnityEditor.Advertisements.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>Library\UnityAssemblies\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.EditorTestsRunner">
+      <HintPath>Library\UnityAssemblies\UnityEditor.EditorTestsRunner.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>Library\UnityAssemblies\UnityEngine.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.UI">
+      <HintPath>Library\UnityAssemblies\UnityEditor.UI.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.Networking">
       <HintPath>Library\UnityAssemblies\UnityEngine.Networking.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEditor">
-      <HintPath>Library\UnityAssemblies\UnityEditor.dll</HintPath>
+    <Reference Include="UnityEditor.Networking">
+      <HintPath>Library\UnityAssemblies\UnityEditor.Networking.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.TreeEditor">
+      <HintPath>Library\UnityAssemblies\UnityEditor.TreeEditor.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.Graphs">
+      <HintPath>Library\UnityAssemblies\UnityEditor.Graphs.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.WindowsStandalone.Extensions">
+      <HintPath>Library\UnityAssemblies\UnityEditor.WindowsStandalone.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="SyntaxTree.VisualStudio.Unity.Bridge">
+      <HintPath>Library\UnityAssemblies\SyntaxTree.VisualStudio.Unity.Bridge.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Test\Test.cs" />
-    <Compile Include="Assets\Test\iTween.cs" />
-    <Compile Include="Assets\uGUI\Scripts\Internal\ToggleActiveObjects.cs" />
-    <Compile Include="Assets\uGUI\Scripts\Internal\uDragObject.cs" />
-    <Compile Include="Assets\uGUI\Scripts\Internal\uEnum.cs" />
-    <Compile Include="Assets\uGUI\Scripts\Internal\uPlayTween.cs" />
-    <Compile Include="Assets\uGUI\Scripts\Tween\Bezier.cs" />
-    <Compile Include="Assets\uGUI\Scripts\Tween\EaseManager.cs" />
-    <Compile Include="Assets\uGUI\Scripts\Tween\uButtonScale.cs" />
-    <Compile Include="Assets\uGUI\Scripts\Tween\uIPointHandler.cs" />
-    <Compile Include="Assets\uGUI\Scripts\Tween\uSliderColors.cs" />
-    <Compile Include="Assets\uGUI\Scripts\Tween\uTween.cs" />
-    <Compile Include="Assets\uGUI\Scripts\Tween\uTweenAlpha.cs" />
-    <Compile Include="Assets\uGUI\Scripts\Tween\uTweenColor.cs" />
-    <Compile Include="Assets\uGUI\Scripts\Tween\uTweenFloat.cs" />
-    <Compile Include="Assets\uGUI\Scripts\Tween\uTweenImage.cs" />
-    <Compile Include="Assets\uGUI\Scripts\Tween\uTweenLayoutElement.cs" />
-    <Compile Include="Assets\uGUI\Scripts\Tween\uTweenPath.cs" />
-    <Compile Include="Assets\uGUI\Scripts\Tween\uTweenPosition.cs" />
-    <Compile Include="Assets\uGUI\Scripts\Tween\uTweenRect.cs" />
-    <Compile Include="Assets\uGUI\Scripts\Tween\uTweenRotation.cs" />
-    <Compile Include="Assets\uGUI\Scripts\Tween\uTweenScale.cs" />
-    <Compile Include="Assets\uGUI\Scripts\Tween\uTweenSlider.cs" />
-    <Compile Include="Assets\uGUI\Scripts\Tween\uTweenText.cs" />
-    <Compile Include="Assets\uGUI\Scripts\Tween\uTweenVector3.cs" />
-    <Compile Include="Assets\uGUI\Scripts\Tween\uTweener.cs" />
+    <ProjectReference Include="uGUI.CSharp.csproj">
+      <Project>{79364F63-9187-B712-BF18-2E4849DAD83B}</Project>
+      <Name>uGUI.CSharp</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Editor\AlphaNumericSort.cs" />
+    <Compile Include="Assets\Scripts\Editor\GUIHierarchy.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\Fonts\Jupiter\LICENSE.txt" />
+    <None Include="Assets\Materials\UI-Default-No-Alpha.shader" />
+    <None Include="Assets\Textures and Sprites\SF UI\Background\LICENSE.txt" />
     <None Include="Assets\uGUI\Shaders\Resources\UTools-DefaultGray.shader" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
