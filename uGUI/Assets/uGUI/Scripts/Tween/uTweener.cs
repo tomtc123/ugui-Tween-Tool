@@ -34,6 +34,8 @@ namespace uTools
         public int tweenGroup = 0;
         public UnityEvent onFinished = null;
 
+        public UnityAction onUpdate = null;
+
         [HideInInspector]
         public GameObject eventReceiver;
 		[HideInInspector]
@@ -166,9 +168,13 @@ namespace uTools
 
             val = (method == EaseType.none) ? animationCurve.Evaluate(val) : EaseManager.EasingFromType(0, 1, val, method);
 
-            Debug.Log(val);
             // Call the virtual update
             OnUpdate((method == EaseType.none) ? animationCurve.Evaluate(val) : val, isFinished);
+
+            if (onUpdate != null)
+            {
+                onUpdate.Invoke();
+            }
         }
 
         /// <summary>

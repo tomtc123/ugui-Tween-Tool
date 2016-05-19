@@ -36,7 +36,8 @@ namespace uTools {
 
 		protected override void OnUpdate (float _factor, bool _isFinished)
 		{
-            QuaternionValue = Quaternion.Euler(Vector3.Lerp(from, to, _factor));
+            value = Vector3.Lerp(from, to, _factor);
+            QuaternionValue = Quaternion.Euler(value);
 		}
 
 		public static uTweenRotation Begin(GameObject go, Vector3 from, Vector3 to, float duration = 1f, float delay = 0f) {
