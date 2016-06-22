@@ -11,16 +11,27 @@ namespace uTools {
 
 		Transform mTransform;
 		Graphic[] mGraphics;
+        Graphic[] cachedGraphics
+        {
+            get
+            {
+                if (mGraphics == null)
+                {
+                    mTransform = GetComponent<Transform>();
+                    if (target == null)
+                    {
+                        target = gameObject;
+                    }
+                    mGraphics = includeChildren ? target.GetComponentsInChildren<Graphic>() : target.GetComponents<Graphic>();
+                }
+                return mGraphics;
+            }
+        }
 
 		float mAlpha = 0f;
 
 		protected override void Start ()
-		{
-			mTransform = GetComponent<Transform>();
-			if (target == null) {
-				target = gameObject;
-			}
-			mGraphics = includeChildren?target.GetComponentsInChildren<Graphic>() : target.GetComponents<Graphic>();			
+		{		
 			base.Start ();
 		}
 
@@ -40,7 +51,7 @@ namespace uTools {
 		}
 
 		void SetAlpha(Transform _transform, float _alpha) {
-			foreach (var item in mGraphics) {
+			foreach (var item in cachedGraphics) {
 				Color color = item.color;
 				color.a = _alpha;
 				item.color = color;

@@ -10,15 +10,26 @@ namespace uTools {
 		public bool includeChildren = false;
 
 		Graphic[] mGraphics;
+        Graphic[] cachedGraphics
+        {
+            get
+            {
+                if (mGraphics == null)
+                {
+                    if (target == null)
+                    {
+                        target = gameObject;
+                    }
+                    mGraphics = includeChildren ? target.GetComponentsInChildren<Graphic>() : target.GetComponents<Graphic>();
+                }
+                return mGraphics;
+            }
+        }
 
 		Color mColor = Color.white;
 
 		protected override void Start ()
 		{
-			if (target == null) {
-				target = gameObject;
-			}
-			mGraphics = includeChildren?target.GetComponentsInChildren<Graphic>() : target.GetComponents<Graphic>();
 			base.Start ();
 		}
 
@@ -55,7 +66,7 @@ namespace uTools {
         }
 
         void SetColor(Transform _transform, Color _color) {
-			foreach (var item in mGraphics) {
+			foreach (var item in cachedGraphics) {
 				item.color = _color;
 			}			
 		}
