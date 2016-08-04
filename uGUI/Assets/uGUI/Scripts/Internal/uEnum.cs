@@ -16,4 +16,11 @@ namespace uTools {
 		OnPointerUp,
 		OnPointerExit,
 	}
+
+    public enum eShake
+    {
+        Position,
+        Rotation,
+        Scale
+    }
 }
