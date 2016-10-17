@@ -29,7 +29,8 @@ namespace uTools
         private Vector3 localEulerAngles = Vector3.zero;
         private Vector3 eulerAngles = Vector3.zero;
 
-        public Vector3 limit;
+        [SerializeField]
+        protected Vector3 limit;
         public Space space = Space.Self;
         public eShake shakeType = eShake.Position;
 
