@@ -17,10 +17,10 @@ namespace uTools {
 		OnPointerExit,
 	}
 
-    public enum eShake
+    public enum ShakeType
     {
-        Position,
-        Rotation,
-        Scale
+        ePosition,
+        eScale,
+        eRotation
     }
 }

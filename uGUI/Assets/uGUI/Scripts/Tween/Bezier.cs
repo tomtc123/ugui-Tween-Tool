@@ -4,7 +4,7 @@ using System;
 
 namespace uTools
 {
-    public class Bezier : uTweener
+    public class Bezier : Tweener
     {
         public Transform target;
         public Vector3[] path;
