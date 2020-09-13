@@ -7,7 +7,6 @@ using System;
 
 public class ButtonCD : MonoBehaviour
 {
-
     public float CD = 0.1f;
     float mClickTime = 0f;
     public bool isChangeColor = false;
@@ -21,7 +20,15 @@ public class ButtonCD : MonoBehaviour
 
     void OnEnable()
     {
-        SetButtonEnable(true);
+        var leftTime = Time.realtimeSinceStartup - mClickTime;
+        if(leftTime >= CD)
+        {
+            SetButtonEnable(true);
+        }
+        else
+        {
+            StartCoroutine(IESetButtonEnable(leftTime));
+        }
     }
 
     public void OnPointerClick()
@@ -30,13 +37,13 @@ public class ButtonCD : MonoBehaviour
         {
             mClickTime = Time.realtimeSinceStartup;
             SetButtonEnable(false);
-            StartCoroutine(IESetButtonEnable());
+            StartCoroutine(IESetButtonEnable(CD));
         }
     }
 
-    IEnumerator IESetButtonEnable()
+    IEnumerator IESetButtonEnable(float time)
     {
-        yield return new WaitForSeconds(CD);
+        yield return new WaitForSeconds(time);
         SetButtonEnable(true);
     }
 

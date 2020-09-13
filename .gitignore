@@ -51,3 +51,6 @@ uGUI/Temp/
 uGUI/obj/
 uGUI/Assets/Test/
 uGUI/Assets/Test.meta
+/uGUI/ProjectSettings
+/uGUI/Packages
+/uGUI/Logs

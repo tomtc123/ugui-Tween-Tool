@@ -9,7 +9,7 @@ namespace uTools {
 	public class ButtonScale : MonoBehaviour, IPointHandler {
 
 		public RectTransform tweenTarget;
-		public Vector3 enter = new Vector3(1.1f, 1.1f, 1.1f);
+		public Vector3 enter = Vector3.one;
 		public Vector3 down = new Vector3(1.05f, 1.05f, 1.05f);
 		public float duration = .2f;
 
@@ -30,10 +30,7 @@ namespace uTools {
 
         // Use this for initialization
         void Start () {
-			if (tweenTarget == null) {
-				tweenTarget = GetComponent<RectTransform>();
-			}
-			mScale = tweenTarget.localScale;
+			mScale = mCacheTarget.localScale;
 		}
 
         void OnDisable()

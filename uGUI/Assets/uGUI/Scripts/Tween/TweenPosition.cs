@@ -35,8 +35,6 @@ namespace uTools {
                 if (mTransform == null)
                 {
                     mTransform = transform;
-                    RectTransform rect = cachedTransform as RectTransform;
-                    is3D = (rect != null) ? false : true;
                 }
                 return mTransform;
             }
@@ -50,7 +48,6 @@ namespace uTools {
                 if (mRectTransform == null)
                 {
                     mRectTransform = cachedTransform as RectTransform;
-                    is3D = (mRectTransform != null) ? false : true;
                 }
                 return mRectTransform;
             }
